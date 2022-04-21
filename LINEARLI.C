@@ -18,6 +18,9 @@ void InsertAtEnd(node **head, int item);
 void InsertAfterElement(node *head, int item, int after);
 node *Search(node *head, int item);
 node *SearchInSorted(node *head, int item);
+void DeleteFromBeginning(node **head);
+void DeleteFromEnd(node **head);
+void DeleteAfterElement(node *head, int item);
 
 //main function
 void main()
@@ -28,8 +31,8 @@ void main()
 	CreateEmptyList(&head);
 	while(1)
 	{
-		printf("\nOperations available are:\n");
-		printf("1.Insert at beginning \n2.Traverse in order \n3.Traverse in reverse order\n4.Insert at end\n5.Search\n6.Insert after element\n7.Search in sorted list");
+		printf("\nOperations available are:");
+		printf("\n1.Insert at beginning \n2.Traverse in order \n3.Traverse in reverse order\n4.Insert at end\n5.Search\n6.Insert after element\n7.Search in sorted list\n8.Delete from beginning\n9.Delete from end\n10.Delete after element\n");
 		printf("Enter choice:");
 		scanf("%d",&choice);
 		switch(choice)
@@ -72,6 +75,17 @@ void main()
 				printf("Enter element:");
 				scanf("%d",&element);
 				printf("%d",SearchInSorted(head,element));
+				break;
+			case 8:
+				DeleteFromBeginning(&head);
+				break;
+			case 9:
+				DeleteFromEnd(&head);
+				break;
+			case 10:
+				printf("Enter element:");
+				scanf("%d",&element);
+				DeleteAfterElement(head,element);
 				break;
 			default:
 				exit(0);
@@ -161,4 +175,53 @@ void InsertAfterElement(node *head, int item, int after)
 	ptr->info=item;
 	ptr->next=loc->next;
 	loc->next=ptr;
+}
+
+void DeleteFromBeginning(node **head)
+{
+	node *ptr;
+	if(*head==NULL)
+		return;
+	else
+	{
+		ptr=*head;
+		*head=(*head)->next;
+		free(ptr);
+	}
+}
+
+void DeleteFromEnd(node **head)
+{
+	node *ptr,*loc;
+	if(*head==NULL)
+		return;
+	else if((*head)->next==NULL)
+	{
+		ptr=*head;
+		*head=NULL;
+		free(ptr);
+	}
+	else
+	{
+		loc=*head;
+		ptr=(*head)->next;
+		while(ptr->next!=NULL)
+		{
+			loc=ptr;
+			ptr=ptr->next;
+		}
+		loc->next=NULL;
+		free(ptr);
+	}
+}
+
+void DeleteAfterElement(node *head, int item)
+{
+	node *ptr,*loc;
+	loc=Search(head,item);
+	if(loc==(node*)NULL)
+		return;
+	ptr=loc->next;
+	loc->next=ptr->next;
+	free(ptr);
 }
